@@ -1,7 +1,7 @@
 MultiTouchPad
 {
 	classvar <responder, <fingersDict, <activeBlobs, <>setAction, <>touchAction, <>untouchAction,
-		<guiOn, <guiWin, <isRunning, <pid, <stopFunc;
+		<guiOn, <guiWin, <isRunning, <pid, <stopFunc, <device;
 	
 	
 	*initClass
@@ -12,6 +12,18 @@ MultiTouchPad
 		guiOn = false;
 		isRunning = false;
 		stopFunc = { this.stop; };
+		device = 0;
+	}
+	
+	*setDevice
+	{|argDevice|
+		
+		argDevice.switch
+		(
+			\internal, { device = 0; },
+			\external, { device = 1; },
+			{ "argDevice must be \\internal for internal trackpad and \\external for external trackpad.".error; }
+		);
 	}
 	
 	*start
@@ -29,7 +41,7 @@ MultiTouchPad
 						"A dangling tongsengmod process was found and terminated.".postln;
 					});
 					
-					pid = ("tongsengmod localhost" + NetAddr.langPort.asString).unixCmd
+					pid = ("tongsengmod localhost" + NetAddr.langPort.asString + device.asString).unixCmd
 					({|res|
 						
 						if(res == 127,
