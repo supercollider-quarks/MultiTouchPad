@@ -28,11 +28,11 @@ MultiTouchPad
 	}
 
 	*start
-	{|argForce|
+	{|force|
 
-		if(isRunning == false or: { argForce == \force; },
+		if(isRunning == false or: { force == \force; },
 		{
-			if(argForce == \force, { responder.remove; }); //in case...
+			if(force == \force, { responder.remove; }); //in case...
 
 			"killall tongsengmod".unixCmd
 				({|res|
