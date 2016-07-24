@@ -2,7 +2,7 @@ MultiTouchPad
 {
 	classvar <responder, <fingersDict, <activeBlobs, <>setAction, <>touchAction, <>untouchAction,
 		<guiOn, <guiWin, <isRunning, <pid, <stopFunc, <device;
-	classvar <>progpath = "";
+	classvar <>progpath = "/usr/local/bin";
 
 
 	*initClass
