@@ -8,7 +8,8 @@ MultiTouchPad is a quark and class written by Batuhan Bozkurt which allows using
 MTP is a variant with some extensions by Alberto de Campo.
 MultiTouchPad is a Singleton class, so there are only class methods.
 
-subsection::INSTALLATION
+note:: strong:: MultiTouchPad requires installation! ::
+
 Touchpad support is not integrated into SC at this time, so you need to download, compile and install tongsengmod (an application forked from the tongseng project to be used with SC) to make use of this class. This class handles the execution and termination of the tongsengmod application behind the scenes, so all you need to do is to compile and install it once:
 
 code::
@@ -27,6 +28,17 @@ $ cd <extracted folder name>
 $ make
 
 $ sudo make install
+::
+This puts the tongsengmod program file in /usr/local/bin, where SC finds it.
+MultiTouchPad.progpath = "/usr/local/bin";
+
+For standalones, it is best to put it in the app's resource directory,
+and tell MultiTouchPad to look there:
+code::
+String.scDir.openOS;
+MultiTouchPad.progpath = String.scDir;
+::
+
 ::
 
 Works with OSX versions from Leopard (10.5) up to El Capitan (10.11).
@@ -62,8 +74,14 @@ argument:: argDevice
 argDevice is \internal for internal trackpad (default) and \external for external trackpad.
 
 METHOD:: progpath
-the path where MultiTouchPad expects to find the tongsengmod program.
-
+the path where MultiTouchPad expects to find the tongsengmod program file.
+By default this is code::"/usr/local/bin"::, which is where the installer puts it.
+For standalones, it is best to put it in the app's resource directory,
+and tell MultiTouchPad to look there:
+code::
+String.scDir.openOS;
+MultiTouchPad.progpath = String.scDir.postcs;
+::
 
 subsection:: Accessing variables
 
