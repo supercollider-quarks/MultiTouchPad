@@ -40,20 +40,53 @@ MTP.setAction = { |id, xys|
 
 CLASSMETHODS::
 
-METHOD:: uview
-the userview used for MTP finger display
+subsection:: The same as in MultiTouchPad :
 
-The same as in MultiTouchPad :
-
-METHOD:: start, stop, gui, setDevice
+METHOD:: start
+METHOD:: stop
 METHOD:: touchAction, untouchAction, setAction, resetActions
+METHOD:: stopFunc
 
 METHOD:: progpath
+METHOD:: setDevice
 METHOD:: activeBlobs, fingersDict
+METHOD:: gui
 METHOD:: guiWin, guiOn
 METHOD:: device, pid, isRunning
-METHOD:: processOSC, stopFunc, responder
+METHOD:: processOSC
+METHOD:: responder
 
+subsection:: New methods in MTP :
+METHOD:: killAll
+kill all instances of tongsengmod
+METHOD:: uview
+the userview used for MTP finger display
+METHOD:: refresh
+refresh guiWin
+METHOD:: maximize
+maximize guiWin so one can safely play without touching any other windows
+METHOD:: minimize
+minimize guiWin, to smallRect
+METHOD:: smallRect
+bounds to use for minimizing - will be retained when set by rezising.
+
+METHOD:: infoText
+get general text to display on guiWin
+METHOD:: extraText
+get and set extra text to display on guiWin
+
+METHOD:: fingerCol
+get and set color to display fingers with
+METHOD:: fingerSize
+get and set size to display fingers with
+METHOD:: fingerStrings
+dict of strings to diplay around each finger
+
+private:: prStart
+
+
+
+INSTANCEMETHODS::
 
 EXAMPLES::
 
