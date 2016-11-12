@@ -130,25 +130,28 @@ MTP {
 				});
 			});
 
-			^this;
+			^this
 		});
 
-		if(msg[1] == 'set', {
-			if(fingersDict.at(curID).isNil, {
-				"MTP: bug? this should never happen.".postln;
-			});
-			if(fingersDict.at(curID) == -1, { touchAction.value(curID, xys); });
-			fingersDict.put(curID, xys);
-			setAction.value(curID, xys);
-			this.refresh;
-			^this;
-		});
+		if(msg[1] == 'set') {
+			if(fingersDict.at(curID).isNil) {
+				"MTP fingerID not found - should never happen.".postln;
+			} {
+				if(fingersDict.at(curID) == -1, { touchAction.value(curID, xys); });
+				fingersDict.put(curID, xys);
+				setAction.value(curID, xys);
+				this.refresh;
+			}
+		}
 	}
 
 	*maximize {
-		smallRect = guiWin.bounds; // Rect(100, 100, 525, 375);
+		if( guiWin.bounds != Window.screenBounds ){
+			smallRect = guiWin.bounds; // Rect(100, 100, 525, 375);
+		};
 		guiWin.bounds_(Window.screenBounds);
 	}
+
 	*minimize {
 		guiWin.bounds_(smallRect);
 	}
