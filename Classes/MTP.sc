@@ -146,7 +146,10 @@ MTP {
 	}
 
 	*maximize {
-		if( guiWin.bounds != Window.screenBounds ){
+		var mybounds = guiWin.bounds;
+		var scrbounds = Window.screenBounds;
+		if( mybounds.left != 0 and: { mybounds.width != scrbounds.width } ){
+			"smallRect: %\n".postf(smallRect);
 			smallRect = guiWin.bounds; // Rect(100, 100, 525, 375);
 		};
 		guiWin.bounds_(Window.screenBounds);
