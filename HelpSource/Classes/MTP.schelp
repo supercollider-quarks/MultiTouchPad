@@ -7,7 +7,8 @@ DESCRIPTION::
 MultiTouchPad is a quark and class written by Batuhan Bozkurt which allows using multitouch enabled touchpads on current MacBook models.
 MTP is an update with some extensions by Alberto de Campo. Both are Singleton classes, so there are only class methods.
 
-note::Requires Installation - see:  Classes/MultiTouchPad.::
+note::Requires Installation of tongsengmod cmdline program
+- see:  Classes/MultiTouchPad.::
 
 Works with OSX Leopard up to El Capitan (10.11).
 
@@ -57,6 +58,46 @@ METHOD:: processOSC
 METHOD:: responder
 
 subsection:: New methods in MTP :
+
+METHOD:: keydownDict
+dictionary of functions to do when that key is pressed.
+code::
+// New actions for keys can be added easily:
+MTP.start.gui;
+MTP.keydownDict.put($a, { |view, key| "MTP test: key % was pressed.\n".postf(key.cs) });
+// now put MTP window in front, and press the 'A' key on the keyboard
+::
+
+METHOD:: defaultDrawFunc
+the default drawFunc used by MTPs userview.
+code::
+// see the defaultDrawFunc:
+MTP.defaultDrawFunc.cs;
+
+// only do the finger drawing part of it, with little mods:
+MTP.start.gui;
+MTP.uview.drawFunc = { |uv|
+	var bounds = uv.bounds;
+	var halfFing = MTP.fingerSize * 0.5;
+	// draw finger touchpoints and info for them
+	MTP.fingersDict.keysValuesDo { |key, fItem|
+		var x = bounds.width - halfFing * fItem[0];
+		var y = bounds.height - halfFing * fItem[1];
+		var fingSize = MTP.fingerSize * fItem[2];
+
+		// random color, fill instead of stroke
+		Pen.color = Color.rand;
+		Pen.fillOval( Rect(x, y, fingSize, fingSize));
+
+		Pen.stringCenteredIn(
+			MTP.fingerStrings[key] ? key.asString,
+			Rect.aboutPoint(x@y, 60, 30)
+		);
+	};
+
+};
+::
+
 METHOD:: killAll
 kill all instances of tongsengmod
 METHOD:: uview
@@ -69,6 +110,7 @@ METHOD:: minimize
 minimize guiWin, to smallRect
 METHOD:: smallRect
 bounds to use for minimizing - will be retained when set by rezising.
+
 
 METHOD:: infoText
 get general text to display on guiWin

@@ -6,6 +6,7 @@ MTP {
 	classvar <isRunning = false, <pid, <stopFunc, <device;
 	classvar <>progpath = "/usr/local/bin", <infoText, <>extraText;
 	classvar <smallRect;
+	classvar <keydownDict, <defaultDrawFunc;
 
 	*initClass {
 		responder = OSCresponderNode(nil, "/tuio/2Dobj", {|...args| this.processOSC(*args); });
@@ -22,6 +23,42 @@ MTP {
 			"space to start, . to stop",
 			"m for big, x for small"
 		];
+		keydownDict = (
+			$.: { MTP.stop },
+			$ : { MTP.start; },
+			$x: { MTP.maximize },
+			$n: { MTP.minimize },
+		);
+		defaultDrawFunc = { |uv|
+			var bounds = uv.bounds;
+			var halfFing = MTP.fingerSize * 0.5;
+			var status = ["OFF", "ON"][MTP.isRunning.binaryValue];
+
+			// on or off background color
+			uv.background_(Color.grey(MTP.isRunning.binaryValue * 0.24 + 0.38));
+
+			// draw on/off and default key commands
+			Pen.stringAtPoint(status, 4@0, Font("Futura", 32), Color.white);
+			(MTP.infoText ++ MTP.extraText).do { |line, i|
+				Pen.stringAtPoint(line, 80@(i * 16),
+					Font("Futura", 16), Color.white)
+			};
+
+			// draw finger touchpoints and info for them
+			MTP.fingersDict.keysValuesDo { |key, fItem|
+				var x = bounds.width - halfFing * fItem[0];
+				var y = bounds.height - halfFing * fItem[1];
+				var fingSize = MTP.fingerSize * fItem[2];
+
+				Pen.color = MTP.fingerCol;
+				Pen.strokeOval( Rect(x, y, fingSize, fingSize));
+
+				Pen.stringCenteredIn(
+					MTP.fingerStrings[key] ? key.asString,
+					Rect.aboutPoint(x@y, 60, 30)
+				);
+			};
+		};
 	}
 
 	*refresh {
@@ -54,7 +91,7 @@ MTP {
 
 		if (isRunning and: force.not) {
 			"MTP is already active and running. Try: \n"
-			" MTP.start(force: true);\n".error;
+			" MTP.start(force: true);\n".warn;
 			^this
 		};
 
@@ -171,42 +208,13 @@ MTP {
 		.onClose_({ guiOn = false; guiWin = nil; uview = nil });
 
 		guiWin.view.keyDownAction = { |view, key|
-			if (key == $.) { MTP.stop };
-			if (key == $ ) { MTP.start; };
-			if (key == $m) { MTP.maximize };
-			if (key == $x) { MTP.minimize };
+			MTP.keydownDict[key].value(view, key);
 		};
 
 		uview = UserView(guiWin, guiWin.view.bounds).resize_(5)
 		.background_(Color.grey(0.4));
 
-		uview.drawFunc_({ |uv|
-			var bounds = uv.bounds;
-			var halfFing = MTP.fingerSize * 0.5;
-			var status = ["OFF", "ON"][isRunning.binaryValue];
-
-			uv.background_(Color.grey(isRunning.binaryValue * 0.24 + 0.38));
-
-			Pen.stringAtPoint(status, 4@4, Font("Futura", 32), Color.white);
-			(infoText ++ extraText).do { |line, i|
-				Pen.stringAtPoint(line, 10@(i * 15 + 40),
-					Font("Futura", 16), Color.white)
-			};
-
-			MTP.fingersDict.keysValuesDo { |key, fItem|
-				var x = bounds.width - halfFing * fItem[0];
-				var y = bounds.height - halfFing * fItem[1];
-				var fingSize = MTP.fingerSize * fItem[2];
-
-				Pen.color = MTP.fingerCol;
-				Pen.strokeOval( Rect(x, y, fingSize, fingSize));
-
-				Pen.stringCenteredIn(
-					fingerStrings[key] ? key.asString,
-					Rect.aboutPoint(x@y, 60, 30)
-				);
-			};
-		});
+		uview.drawFunc_(defaultDrawFunc);
 		guiOn = true;
 		^guiWin.front;
 	}
