@@ -41,21 +41,19 @@ MTP.setAction = { |id, xys|
 
 CLASSMETHODS::
 
-subsection:: The same as in MultiTouchPad :
-
 METHOD:: start
 METHOD:: stop
-METHOD:: touchAction, untouchAction, setAction, resetActions
-METHOD:: stopFunc
+start and stop tongsengmod program
+METHOD:: touchAction, untouchAction, setAction
+get and set the actions for touch, untouch and set
 
-METHOD:: progpath
-METHOD:: setDevice
-METHOD:: activeBlobs, fingersDict
+METHOD:: resetActions
+reset all actions to nil
+
 METHOD:: gui
-METHOD:: guiWin, guiOn
-METHOD:: device, pid, isRunning
-METHOD:: processOSC
-METHOD:: responder
+make or show a gui window to play with MTP
+METHOD:: guiWin
+access the gui window (if it exists)
 
 subsection:: New methods in MTP :
 
@@ -124,11 +122,20 @@ get and set size to display fingers with
 METHOD:: fingerStrings
 dict of strings to diplay around each finger
 
-private:: prStart
+private:: prStart, stopFunc
+
+subsection:: Inherited from MultiTouchPad:
+(see link::Classes/MultiTouchPad::)
+
+METHOD:: progpath
+METHOD:: setDevice
+METHOD:: activeBlobs, fingersDict
+METHOD:: guiOn
+METHOD:: device, pid, isRunning
+METHOD:: processOSC
+METHOD:: responder
 
 
-
-INSTANCEMETHODS::
 
 EXAMPLES::
 
