@@ -14,7 +14,7 @@ MTP {
 		activeBlobs = List.new;
 		guiOn = false;
 		isRunning = false;
-		stopFunc = { this.stop; };
+		stopFunc = { this.stop };
 		device = 0;
 		fingerSize = 20;
 		fingerCol = Color.red;
@@ -25,7 +25,7 @@ MTP {
 		];
 		keydownDict = (
 			$.: { MTP.stop },
-			$ : { MTP.start; },
+			$ : { MTP.start },
 			$x: { MTP.maximize },
 			$n: { MTP.minimize },
 		);
@@ -71,8 +71,8 @@ MTP {
 
 		argDevice.switch
 		(
-			\internal, { device = 0; },
-			\external, { device = 1; },
+			\internal, { device = 0 },
+			\external, { device = 1 },
 			{ "argDevice must be \\internal for internal trackpad and \\external for external trackpad.".error; }
 		);
 	}
