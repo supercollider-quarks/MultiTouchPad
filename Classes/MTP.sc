@@ -9,7 +9,7 @@ MTP {
 	classvar <keydownDict, <defaultDrawFunc;
 
 	*initClass {
-		responder = OSCresponderNode(nil, "/tuio/2Dobj", {|...args| this.processOSC(*args); });
+		responder = OSCFunc({|...args| this.processOSC(*args) }, "/tuio/2Dobj");
 		fingersDict = ();
 		activeBlobs = List.new;
 		guiOn = false;
