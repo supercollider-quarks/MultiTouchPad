@@ -73,8 +73,8 @@ MTP {
 		(
 			\internal, { device = 0 },
 			\external, { device = 1 },
-			{ "argDevice must be \\internal for internal trackpad and \\external for external trackpad.".error; }
-		);
+			{ "argDevice must be \\internal for internal trackpad and \\external for external trackpad.".error }
+		)
 	}
 
 	*killAll { |func|
@@ -143,32 +143,29 @@ MTP {
 		var curID = msg[2];
 		var xys = msg[4..6];
 
-		if(msg[1] == 'alive', {
+		if(msg[1] == 'alive') {
 
 			activeBlobs = msg[2..];
-			fingersDict.keys.do ({|item|
+			fingersDict.keys.do {|item|
 
-				if(activeBlobs.includes(item).not,
-					{
-						toRemove.add(item);
-				});
-			});
+				if(activeBlobs.includes(item).not) { toRemove.add(item) };
+			};
 
-			toRemove.do({|item|
+			toRemove.do {|item|
 				fingersDict.removeAt(item);
 				untouchAction.value(item);
 				fingerStrings.removeAt(item);
 				this.refresh;
-			});
+			};
 
-			activeBlobs.do({|item|
-				if(fingersDict.at(item).isNil, {
+			activeBlobs.do {|item|
+				if(fingersDict.at(item).isNil) {
 					fingersDict.put(item, -1); //-1 means xy not initialized
-				});
-			});
+				};
+			};
 
 			^this
-		});
+		};
 
 		if(msg[1] == 'set') {
 			if(fingersDict.at(curID).isNil) {
