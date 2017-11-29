@@ -9,7 +9,8 @@ MTP {
 	classvar <keydownDict, <defaultDrawFunc;
 
 	*initClass {
-		responder = OSCresponderNode(nil, "/tuio/2Dobj", {|...args| this.processOSC(*args); });
+		responder = OSCFunc({ |msg| this.processOSC(msg); }, "/tuio/2Dobj");
+		responder.disable;
 		fingersDict = ();
 		activeBlobs = List.new;
 		guiOn = false;
@@ -136,9 +137,8 @@ MTP {
 		this.refresh;
 	}
 
-	*processOSC { |time, responder, msg|
+	*processOSC { |msg|
 
-		//msg.postln;
 		var toRemove = List.new;
 		var curID = msg[2];
 		var xys = msg[4..6];

@@ -7,7 +7,8 @@ MultiTouchPad
 
 	*initClass
 	{
-		responder = OSCresponderNode(nil, "/tuio/2Dobj", {|...args| this.processOSC(*args); });
+		responder = OSCFunc({|msg| this.processOSC(msg) }, "/tuio/2Dobj");
+		responder.disable;
 		fingersDict = Dictionary.new;
 		activeBlobs = List.new;
 		guiOn = false;
@@ -77,9 +78,8 @@ MultiTouchPad
 	}
 
 	*processOSC
-	{|time, responder, msg|
+	{ |msg|
 
-		//msg.postln;
 		var toRemove = List.new;
 		var curID = msg[2];
 		var xys = msg[4..6];
