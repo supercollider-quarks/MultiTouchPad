@@ -96,7 +96,7 @@ MTP {
 			^this
 		};
 
-		responder.remove;
+		responder.disable;
 
 		if (force) {
 			this.killAll ({ MTP.prStart; });
@@ -110,14 +110,14 @@ MTP {
 			+ NetAddr.langPort + device.asString);
 
 		"%: tongsengmod starting.\n".postf(this);
-		responder.add;
+		responder.enable;
 		isRunning = true;
 		ShutDown.add(stopFunc);
 
 		pid = cmdStr.unixCmd({ |res|
 			if(res == 127, {
 				"tongsengmod executable not found. See \n MTP.openHelpFile;".error;
-				responder.remove;
+				responder.disable;
 				isRunning = false;
 			});
 			if (res == 0) {
@@ -130,7 +130,7 @@ MTP {
 
 
 	*stop {
-		responder.remove;
+		responder.disable;
 		"killall tongsengmod".postcs.unixCmd;
 		isRunning = false;
 		"MTP stopped.".postln;

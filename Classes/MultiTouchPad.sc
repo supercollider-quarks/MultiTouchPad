@@ -33,7 +33,7 @@ MultiTouchPad
 
 		if(isRunning == false or: { force == \force; },
 		{
-			if(force == \force, { responder.remove; }); //in case...
+			if(force == \force, { responder.disable; }); //in case...
 
 			"killall tongsengmod".unixCmd
 				({|res|
@@ -53,7 +53,7 @@ MultiTouchPad
 					});
 				});
 
-			responder.add;
+			responder.enable;
 			isRunning = true;
 		},
 		{
@@ -66,12 +66,12 @@ MultiTouchPad
 	{
 		if(isRunning,
 		{
-			responder.remove;
+			responder.disable;
 			("kill -1" + pid.asString).unixCmd;
 			isRunning = false;
 		},
 		{
-			responder.remove; //in case
+			responder.disable; //in case
 			"killall tongsengmod".unixCmd;
 			"MultiTouchPad isn't running.".error;
 		});
