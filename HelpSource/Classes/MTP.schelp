@@ -10,7 +10,7 @@ MTP is an update with some extensions by Alberto de Campo. Both are Singleton cl
 note::Requires Installation of tongsengmod cmdline program
 - see:  Classes/MultiTouchPad.::
 
-Works with OSX Leopard up to El Capitan (10.11).
+Tested with OSX Leopard (10.5) up to macOS High Sierra (10.13.6).
 
 First code example:
 code::
