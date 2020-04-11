@@ -22,7 +22,7 @@ MTP {
 		fingerStrings = ();
 		infoText = List[
 			"space to start, . to stop",
-			"m for big, x for small"
+			"x for big, n for small"
 		];
 		keydownDict = (
 			$.: { MTP.stop },
@@ -34,15 +34,18 @@ MTP {
 			var bounds = uv.bounds;
 			var halfFing = MTP.fingerSize * 0.5;
 			var status = ["OFF", "ON"][MTP.isRunning.binaryValue];
+			var bigFont = Font("Futura", bounds.width / 10);
+			var halfFont = Font("Futura", bounds.width / 30);
 
 			// on or off background color
 			uv.background_(Color.grey(MTP.isRunning.binaryValue * 0.24 + 0.38));
 
 			// draw on/off and default key commands
-			Pen.stringAtPoint(status, 4@0, Font("Futura", 32), Color.white);
+			Pen.stringAtPoint(status, 4@4, bigFont, Color.white);
+
 			(MTP.infoText ++ MTP.extraText).do { |line, i|
-				Pen.stringAtPoint(line, 80@(i * 16),
-					Font("Futura", 16), Color.white)
+				Pen.stringAtPoint(line, (bigFont.size * 2) @ (i * halfFont.size * 1.2),
+					halfFont, Color.white)
 			};
 
 			// draw finger touchpoints and info for them
