@@ -7,6 +7,7 @@ MTP {
 	classvar <>progpath = "/usr/local/bin", <infoText, <>extraText;
 	classvar <smallRect;
 	classvar <keydownDict, <defaultDrawFunc;
+	classvar <guiNeedsUpdate = true, <skip;
 
 	*initClass {
 		responder = OSCFunc({ |msg| this.processOSC(msg); }, "/tuio/2Dobj");
@@ -63,11 +64,16 @@ MTP {
 				);
 			};
 		};
+		skip = SkipJack({ this.refresh }, 0.05);
 	}
 
 	*refresh {
-		if (guiWin.notNil and: { guiWin.isClosed.not }) {
-			defer { guiWin.refresh }
+		if (guiNeedsUpdate and: { guiWin.notNil and: { guiWin.isClosed.not } }) {
+			defer {
+				// "MTP refresh".postln;
+				guiWin.refresh;
+				guiNeedsUpdate = false;
+			};
 		}
 	}
 
@@ -117,7 +123,7 @@ MTP {
 		isRunning = true;
 		ShutDown.add(stopFunc);
 
-		pid = cmdStr.unixCmd({ |res|
+		pid = cmdStr.postcs.unixCmd({ |res|
 			if(res == 127, {
 				"tongsengmod executable not found. See \n MTP.openHelpFile;".error;
 				responder.disable;
@@ -146,6 +152,8 @@ MTP {
 		var curID = msg[2];
 		var xys = msg[4..6];
 
+
+
 		if(msg[1] == 'alive', {
 
 			activeBlobs = msg[2..];
@@ -161,7 +169,7 @@ MTP {
 				fingersDict.removeAt(item);
 				untouchAction.value(item);
 				fingerStrings.removeAt(item);
-				this.refresh;
+				guiNeedsUpdate = true;
 			});
 
 			activeBlobs.do({|item|
@@ -180,7 +188,7 @@ MTP {
 				if(fingersDict.at(curID) == -1, { touchAction.value(curID, xys); });
 				fingersDict.put(curID, xys);
 				setAction.value(curID, xys);
-				this.refresh;
+				guiNeedsUpdate = true;
 			}
 		}
 	}
